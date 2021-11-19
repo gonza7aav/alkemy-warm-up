@@ -21,6 +21,7 @@ class Server {
 
   // Load all the routes the API accepts
   loadRoutes() {
+    this.app.use('/posts', require('../routes/posts'));
   }
 
   async start() {
