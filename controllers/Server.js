@@ -2,6 +2,7 @@
 
 const express = require('express');
 const { sequelize } = require('../models');
+const { logExceptOnTest } = require('./Log');
 
 class Server {
   constructor() {
@@ -30,7 +31,7 @@ class Server {
       // Start to listen request, also save what it return that is
       // a server from the net module. This is used in testing
       this.netServer = this.app.listen(this.port, () =>
-        console.log(`API running at http://localhost:${this.port}`)
+        logExceptOnTest(`API running at http://localhost:${this.port}`)
       );
     } catch (error) {
       console.error(error);
