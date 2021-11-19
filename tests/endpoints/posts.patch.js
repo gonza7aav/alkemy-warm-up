@@ -19,7 +19,7 @@ describe('PATCH /posts/:id', () => {
   it('No title', (done) => {
     chai
       .request(fakeServer.netServer)
-      .patch('/posts/1')
+      .patch('/posts/3')
       .end((err, res) => {
         assert.isNull(err);
         assert.equal(res.status, 400);
@@ -32,7 +32,7 @@ describe('PATCH /posts/:id', () => {
   it('Empty title', (done) => {
     chai
       .request(fakeServer.netServer)
-      .patch('/posts/1')
+      .patch('/posts/3')
       .send({ title: '' })
       .end((err, res) => {
         assert.isNull(err);
@@ -46,7 +46,7 @@ describe('PATCH /posts/:id', () => {
   it('No content', (done) => {
     chai
       .request(fakeServer.netServer)
-      .patch('/posts/1')
+      .patch('/posts/3')
       .end((err, res) => {
         assert.isNull(err);
         assert.equal(res.status, 400);
@@ -59,7 +59,7 @@ describe('PATCH /posts/:id', () => {
   it('Empty content', (done) => {
     chai
       .request(fakeServer.netServer)
-      .patch('/posts/1')
+      .patch('/posts/3')
       .send({ content: '' })
       .end((err, res) => {
         assert.isNull(err);
@@ -101,7 +101,7 @@ describe('PATCH /posts/:id', () => {
   it('No category', (done) => {
     chai
       .request(fakeServer.netServer)
-      .patch('/posts/1')
+      .patch('/posts/3')
       .end((err, res) => {
         assert.isNull(err);
         assert.equal(res.status, 400);
@@ -114,7 +114,7 @@ describe('PATCH /posts/:id', () => {
   it('Invalid category', (done) => {
     chai
       .request(fakeServer.netServer)
-      .patch('/posts/1')
+      .patch('/posts/3')
       .send({ category: 'a' })
       .end((err, res) => {
         assert.isNull(err);
@@ -128,7 +128,7 @@ describe('PATCH /posts/:id', () => {
   it("Category (won't find)", (done) => {
     chai
       .request(fakeServer.netServer)
-      .patch('/posts/1')
+      .patch('/posts/3')
       .send({ category: 0 })
       .end((err, res) => {
         assert.isNull(err);
@@ -168,7 +168,7 @@ describe('PATCH /posts/:id', () => {
   it('Valid', (done) => {
     chai
       .request(fakeServer.netServer)
-      .patch('/posts/1')
+      .patch('/posts/3')
       .send({
         title: 'test',
         content: 'test',

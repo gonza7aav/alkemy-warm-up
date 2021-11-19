@@ -45,7 +45,7 @@ describe('GET /posts/:id', () => {
   it('Search', (done) => {
     chai
       .request(fakeServer.netServer)
-      .get('/posts/1')
+      .get('/posts/2')
       .end((err, res) => {
         assert.isNull(err);
         assert.equal(res.status, 200);
