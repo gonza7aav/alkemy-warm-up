@@ -24,7 +24,7 @@ describe('DELETE /posts/:id', () => {
         assert.isNull(err);
         assert.equal(res.status, 400);
         assert.isArray(res.body.errors);
-        assert.include(res.body.errors, "The is isn't valid");
+        assert.include(res.body.errors, "The post id isn't valid");
         done();
       });
   });
