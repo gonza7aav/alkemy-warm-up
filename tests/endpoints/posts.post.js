@@ -84,6 +84,20 @@ describe('POST /posts', () => {
       });
   });
 
+  it("Image (won't found)", (done) => {
+    chai
+      .request(fakeServer.netServer)
+      .post('/posts')
+      .send({ image: 'http://localhost/' })
+      .end((err, res) => {
+        assert.isNull(err);
+        assert.equal(res.status, 404);
+        assert.isArray(res.body.errors);
+        assert.include(res.body.errors, "The image wasn't found");
+        done();
+      });
+  });
+
   it('No category', (done) => {
     chai
       .request(fakeServer.netServer)
