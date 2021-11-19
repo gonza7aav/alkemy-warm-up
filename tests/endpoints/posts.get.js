@@ -24,14 +24,26 @@ describe('GET /posts', () => {
         assert.isNull(err);
         assert.equal(res.status, 200);
         assert.isArray(res.body);
-        // FIXME: orden
-        res.body.forEach((x) => {
-          assert.property(x, 'id');
-          assert.property(x, 'title');
-          assert.property(x, 'image');
-          assert.property(x, 'category');
-          assert.property(x, 'creationDate');
-        });
+
+        let isDescendingSorted = true;
+        let previousDate = new Date(res.body[0].creationDate);
+        for (let i = 0; i < res.body.length; i++) {
+          assert.property(res.body[i], 'id');
+          assert.property(res.body[i], 'title');
+          assert.property(res.body[i], 'image');
+          assert.property(res.body[i], 'Category');
+          assert.property(res.body[i], 'creationDate');
+
+          let currentDate = new Date(res.body[i].creationDate);
+          if (currentDate.getTime() > previousDate.getTime()) {
+            isDescendingSorted = false;
+          }
+
+          previousDate = currentDate;
+        }
+
+        assert.isTrue(isDescendingSorted, 'expected to be descending sorted');
+
         done();
       });
   });
