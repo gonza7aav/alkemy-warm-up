@@ -84,11 +84,35 @@ describe('PATCH /posts/:id', () => {
       });
   });
 
-  it("Image (won't found)", (done) => {
+  it('Invalid image type', (done) => {
     chai
       .request(fakeServer.netServer)
       .patch('/posts/3')
-      .send({ image: 'http://localhost/' })
+      .send({
+        title: 'test',
+        content: 'test',
+        image: 'http://google.com/test.mp3',
+        category: 1,
+      })
+      .end((err, res) => {
+        assert.isNull(err);
+        assert.equal(res.status, 400);
+        assert.isArray(res.body.errors);
+        assert.include(res.body.errors, "The image type isn't supported");
+        done();
+      });
+  });
+
+  it("Image (won't find)", (done) => {
+    chai
+      .request(fakeServer.netServer)
+      .patch('/posts/3')
+      .send({
+        title: 'test',
+        content: 'test',
+        image: 'http://google.com/test.jpg',
+        category: 1,
+      })
       .end((err, res) => {
         assert.isNull(err);
         assert.equal(res.status, 404);
@@ -129,7 +153,11 @@ describe('PATCH /posts/:id', () => {
     chai
       .request(fakeServer.netServer)
       .patch('/posts/3')
-      .send({ category: 0 })
+      .send({
+        title: 'test',
+        content: 'test',
+        category: 0,
+      })
       .end((err, res) => {
         assert.isNull(err);
         assert.equal(res.status, 404);
@@ -143,6 +171,11 @@ describe('PATCH /posts/:id', () => {
     chai
       .request(fakeServer.netServer)
       .patch('/posts/a')
+      .send({
+        title: 'test',
+        content: 'test',
+        category: 1,
+      })
       .end((err, res) => {
         assert.isNull(err);
         assert.equal(res.status, 400);
@@ -156,6 +189,11 @@ describe('PATCH /posts/:id', () => {
     chai
       .request(fakeServer.netServer)
       .patch('/posts/0')
+      .send({
+        title: 'test',
+        content: 'test',
+        category: 1,
+      })
       .end((err, res) => {
         assert.isNull(err);
         assert.equal(res.status, 404);
@@ -172,6 +210,8 @@ describe('PATCH /posts/:id', () => {
       .send({
         title: 'test',
         content: 'test',
+        image:
+          'https://pbs.twimg.com/profile_images/1115644092329758721/AFjOr-K8_400x400.jpg',
         category: 1,
       })
       .end((err, res) => {
