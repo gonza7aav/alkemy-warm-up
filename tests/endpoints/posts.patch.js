@@ -73,7 +73,7 @@ describe('PATCH /posts/:id', () => {
   it('Invalid image url', (done) => {
     chai
       .request(fakeServer.netServer)
-      .patch('/posts')
+      .patch('/posts/3')
       .send({ image: '' })
       .end((err, res) => {
         assert.isNull(err);
@@ -87,7 +87,7 @@ describe('PATCH /posts/:id', () => {
   it("Image (won't found)", (done) => {
     chai
       .request(fakeServer.netServer)
-      .patch('/posts')
+      .patch('/posts/3')
       .send({ image: 'http://localhost/' })
       .end((err, res) => {
         assert.isNull(err);
