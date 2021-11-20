@@ -32,12 +32,32 @@ router.get('/:id', postValidator.validateSearch(), async (req, res) => {
       },
     });
 
-    // The id has a valid type but it isn't in the database
+    // Check if the post id is inside the database
     if (found.length === 0) {
       return res.status(404).json({ errors: ["The post wasn't found"] });
     }
 
     return res.status(200).json(found[0]);
+  } catch (error) {
+    console.log(error);
+    return res.sendStatus(500);
+  }
+});
+
+// Delete
+router.delete('/:id', postValidator.validateDelete(), async (req, res) => {
+  try {
+    // Search the post to delete
+    const post = await Post.findByPk(req.params.id);
+
+    // Check if the post id is inside the database
+    if (post === null) {
+      return res.status(404).json({ errors: ["The post wasn't found"] });
+    }
+
+    await Post.destroy({ where: { id: post.id } });
+
+    return res.sendStatus(200);
   } catch (error) {
     console.log(error);
     return res.sendStatus(500);
