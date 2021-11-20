@@ -1,5 +1,8 @@
 const axios = require('axios').default;
 
+// This return null if the argument doesn't exist a.k.a. undefined
+const valueOrNull = (x) => (typeof x === 'undefined' ? null : x);
+
 const checkImageURL = async (url) => {
   const IMAGE_FILE_EXTENSIONS = [
     'apng',
@@ -59,4 +62,4 @@ const checkImageURL = async (url) => {
   return { success: true };
 };
 
-module.exports = { checkImageURL };
+module.exports = { valueOrNull, checkImageURL };

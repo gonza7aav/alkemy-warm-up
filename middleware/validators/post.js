@@ -40,6 +40,39 @@ const validateCreate = () => {
   return validateSchema(schema);
 };
 
+const validateUpdate = () => {
+  const schema = {
+    id: {
+      in: ['params'],
+      isInt: true,
+      errorMessage: "The post id isn't valid",
+    },
+    title: {
+      in: ['body'],
+      notEmpty: true,
+      errorMessage: "The title isn't valid",
+    },
+    content: {
+      in: ['body'],
+      notEmpty: true,
+      errorMessage: "The content isn't valid",
+    },
+    image: {
+      in: ['body'],
+      optional: true,
+      isURL: true,
+      errorMessage: "The image url isn't valid",
+    },
+    category: {
+      in: ['body'],
+      isInt: true,
+      errorMessage: "The category isn't valid",
+    },
+  };
+
+  return validateSchema(schema);
+};
+
 const validateDelete = () => {
   const schema = {
     id: {
@@ -55,5 +88,6 @@ const validateDelete = () => {
 module.exports = {
   validateSearch,
   validateCreate,
+  validateUpdate,
   validateDelete,
 };

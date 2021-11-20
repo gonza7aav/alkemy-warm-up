@@ -1,7 +1,7 @@
 const router = require('express').Router();
 const { Post, Category } = require('../models');
 const postValidator = require('../middleware/validators/post');
-const { checkImageURL } = require('../middleware/util');
+const { valueOrNull, checkImageURL } = require('../middleware/util');
 
 // List
 router.get('/', async (req, res) => {
@@ -66,8 +66,9 @@ router.post('/', postValidator.validateCreate(), async (req, res) => {
     }
 
     const newPost = await Post.create({
-      ...req.body,
-      id: undefined,
+      title: req.body.title,
+      content: req.body.content,
+      image: valueOrNull(req.body.image),
       creationDate: new Date(),
     });
 
@@ -75,6 +76,45 @@ router.post('/', postValidator.validateCreate(), async (req, res) => {
     await newPost.setCategory(categoryFound);
 
     return res.sendStatus(201);
+  } catch (error) {
+    console.log(error);
+    return res.sendStatus(500);
+  }
+});
+
+router.patch('/:id', postValidator.validateUpdate(), async (req, res) => {
+  try {
+    // Check if the post id is in the database
+    const post = await Post.findByPk(req.params.id);
+    if (post === null) {
+      return res.status(404).json({ errors: ["The post wasn't found"] });
+    }
+
+    // We ask this first because the image is optional
+    if (typeof req.body.image !== 'undefined') {
+      const result = await checkImageURL(req.body.image);
+
+      if (!result.success) {
+        return res
+          .status(result.statusToSend)
+          .json({ errors: [result.messageToSend] });
+      }
+    }
+
+    // Check if the category id is inside the database
+    const categoryFound = await Category.findByPk(req.body.category);
+    if (categoryFound === null) {
+      return res.status(404).json({ errors: ["The category wasn't found"] });
+    }
+
+    await post.update({
+      title: req.body.title,
+      content: req.body.content,
+      image: valueOrNull(req.body.image),
+      category: req.body.category,
+    });
+
+    return res.sendStatus(200);
   } catch (error) {
     console.log(error);
     return res.sendStatus(500);
