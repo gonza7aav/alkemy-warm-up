@@ -42,7 +42,7 @@ describe('GET /posts/:id', () => {
       });
   });
 
-  it('Search', (done) => {
+  it('Valid', (done) => {
     chai
       .request(fakeServer.netServer)
       .get('/posts/2')
