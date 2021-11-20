@@ -11,6 +11,7 @@
   "author": "Aguirre Gonzalo Adolfo <gonza.a.aguirre@gmail.com> (https://github.com/gonza7aav)",
   "license": "MIT",
   "dependencies": {
+    "axios": "0.24.0",
     "chai": "4.3.4",
     "chai-http": "4.3.0",
     "express": "4.17.1",

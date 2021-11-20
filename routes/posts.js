@@ -1,6 +1,7 @@
 const router = require('express').Router();
-const postValidator = require('../middleware/validators/post');
 const { Post, Category } = require('../models');
+const postValidator = require('../middleware/validators/post');
+const { checkImageURL } = require('../middleware/util');
 
 // List
 router.get('/', async (req, res) => {
@@ -38,6 +39,42 @@ router.get('/:id', postValidator.validateSearch(), async (req, res) => {
     }
 
     return res.status(200).json(found[0]);
+  } catch (error) {
+    console.log(error);
+    return res.sendStatus(500);
+  }
+});
+
+// Create
+router.post('/', postValidator.validateCreate(), async (req, res) => {
+  try {
+    // We ask this first because the image is optional
+    if (typeof req.body.image !== 'undefined') {
+      const result = await checkImageURL(req.body.image);
+
+      if (!result.success) {
+        return res
+          .status(result.statusToSend)
+          .json({ errors: [result.messageToSend] });
+      }
+    }
+
+    // Check if the category id is inside the database
+    const categoryFound = await Category.findByPk(req.body.category);
+    if (categoryFound === null) {
+      return res.status(404).json({ errors: ["The category wasn't found"] });
+    }
+
+    const newPost = await Post.create({
+      ...req.body,
+      id: undefined,
+      creationDate: new Date(),
+    });
+
+    // Adds the relation with Category
+    await newPost.setCategory(categoryFound);
+
+    return res.sendStatus(201);
   } catch (error) {
     console.log(error);
     return res.sendStatus(500);

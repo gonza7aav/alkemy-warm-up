@@ -14,6 +14,7 @@
     "function-paren-newline": "off",
     "implicit-arrow-linebreak": "off",
     "linebreak-style": "off",
-    "no-console": "off"
+    "no-console": "off",
+    "operator-linebreak": "off"
   }
 }
